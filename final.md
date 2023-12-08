@@ -444,4 +444,102 @@ void List<T>::copyList(node *list) {
 
 ### Polymorphic containers
 
+We can create a dummy class (or so-called base class) container so that we can store information of any derived class.
 
+Caution: a virtual destructor is needed so that when we delete the derived class, the destructor of derived class can be called.
+
+```cpp
+class Object {
+    public:
+        virtual ~Object() { }
+};
+```
+
+We define a container `List`
+
+```cpp
+struct node {
+    node *next;
+    Object *value;
+};
+
+class List {
+    ...
+    public:
+        void insert(Object *o);
+        Object *remove();
+        ...
+};
+```
+
+Then we define a class `Bigthing` and we use it in the following way.
+
+```cpp
+class BigThing : public Object {
+    ...
+};
+
+BigThing *bp = new BigThing;
+l.insert(bp);
+```
+
+To handle the typecast problem between base class and derived class, we need to use `dynamic_cast`. `dynamic_cast` will return NULL if typecast fails.
+
+```cpp
+Object *op;
+BigThing *bp;
+
+op = l.remove();
+bp = dynamic_cast<BigThing *>(op);
+...
+```
+
+And we need to provide a copy constructor to enable a deep copy. However, we can't simply write the copy constructor in the following way
+
+```cpp
+void List::copyList(node *list) {
+    if(!list) return;
+    copyList(list->next);
+    Object *o = new Object(*list->value); // BUG: Object does not have a constructor that takes BigThing as an argument
+    insert(o);
+}
+```
+
+To fix the problem, we need o use something called the “named constructor idiom”.
+
+- named constructor: A method that (by convention) copies the object, returning a pointer to the "generic" base class
+- The name of this method (again, by convention) is usually “clone”
+
+```cpp
+class Object {
+    public:
+        virtual Object *clone() = 0;
+        // EFFECT: copy this, return a pointer to it
+        virtual ~Object() { }
+};
+```
+
+Then we implement clone in `BigThing`
+
+```cpp
+class BigThing : public Object {
+    ...
+    public:
+        Object *clone();
+        ...
+        BigThing(const BigThing &b);
+}
+
+Object *BigThing::clone() {
+    BigThing *bp = new BigThing(*this);
+    return bp; // Legal due to substitution
+               // rule
+}
+
+void List::copyList(node *list){
+    if(!list) return;
+    copyList(list->next);
+    Object *o = list->value->clone();
+    insert(o);
+}
+```
