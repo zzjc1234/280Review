@@ -371,4 +371,77 @@ Handle `insertBack` condition more efficiently.
 
 ## Template and container
 
+- Container
+  - `contain` other objects
+  - no intrinsic meaning on their own
+- Polymorphism
+  - Reusing code for different types
+
+We can use `template` to write polymorphic container.
+
+The template receive a type name as parameter during compilation. The `class T` is a type name instead of a class name.
+
+```cpp
+template <class T>
+```
+
+To give a representation for the node contained by this List, and that representation must also be parameterized by T.
+
+We can do so by creating a private type, which is part of this class definition
+
+Each method must be declared as a "templated" method and we do that in much the same way as we do for the class definition.
+
+```cpp
+template <class T>
+void List<T>::insert(T v) {
+    node *np = new node;
+    np->next = first;
+    np->v = v;
+    first = np;
+}
+```
+
+- The `#include` and compiling of templates are a little bit different.
+- You should put your class member function definition also in the .h file, following class definition. So, there is no .cpp for member functions
+- To use templates, you specify the type T when creating the container object.
+
+### Container of Pointers
+
+For large things, we usualy pass them by reference to save memory.
+
+To avoid the bugs related to container of pointers, one usual "pattern" of using container of pointers has an invariant, plus three rules of use:
+
+`At-most-once invariant`: any object can be linked to at most one container at any time through pointer.
+
+1. Existence: An object must be dynamically allocated before a pointer to it is inserted.
+2. Ownership: Once a pointer to an object is inserted, that object becomes the property of the container. It can only be modified through the methods of the container.
+3. Conservation: When a pointer is removed from a container, either the pointer must be inserted into some container, or its reference must be deleted after using
+
+Two ways to destroy a container
+
+1. The destructor: Destroys an existing instance.
+2. The assignment operator: Destroys an existing instance before copying the contents of another instance.
+
+```cpp
+template <class T>
+List<T>::~List() {
+    while (!isEmpty()) {
+        T *op = remove();
+        delete op;
+    }
+}
+```
+
+```cpp
+template <class T>
+void List<T>::copyList(node *list) {
+    if (!list) return;
+    copyList(list->next);
+    T *o = new T(*list->value);
+    insert(o);
+}
+```
+
+### Polymorphic containers
+
 
