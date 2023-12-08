@@ -314,10 +314,61 @@ IntSet &IntSet::operator= (const IntSet &is)
 
 ## Dynamic Resizing
 
-To easy to write
+### Motivation
+
+Create an object as large as we want.
+
+### Implementation
+
+Create a `grow` function to enable enlarging the object.
+
+1. Allocate a bigger array.
+2. Copy the smaller array to the bigger one.
+3. Destroy the smaller array.
+4. Modify elts/sizeElts to reflect the new array.
+
+However, if we just grow by one, the efficiency is slow. If a client creates an IntSet of capacity 1, and then inserts N elements into it, it will lead to $/frac{N(N-1)}{2}$ times copy.
+
+The solution is grow by 2 times of original size.
 
 ## Linked List
 
-To easy to write
+When creating a linked list, we need **Big Three** to make sure that
+
+- The invariants hold during object creation.
+- All dynamic resources are accounted for
+
+Here are some basic workflow for single linked back end linked list.
+
+### Insert
+
+1. Create a new node to hold the new "first" element
+2. Establish the invariants on the new node (setting the value field to v), and the next field to the “rest of the list"
+3. Setting the value field to v, and the next field to the “rest of the list"
+
+### Remove
+
+1. Use local variable `victim` to remember the `first` node.
+2. Delete the node after it is skipped by first.
+3. Use another local variable, result, to remember the result that we will eventually return
+4. Throw exception if encounter empty list
+
+### Big Three
+
+We need write a recursive copy helper to handle the copy.
+
+```cpp
+void IntList::copyList(node *list) {
+    if (!list) return; // Base case
+    copyList(list->next);
+    insert(list->value);
+}
+```
+
+### Doubly Linked List
+
+Handle `insertBack` condition more efficiently.
 
 ## Template and container
+
+
