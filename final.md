@@ -694,3 +694,66 @@ class Complex {
       return is;
   }
   ```
+
+## Linear List; Stack; Queue
+
+### Linear List
+
+- A collection of zero or more integers; duplicates possible
+- Supports insertion and removal by position
+
+### Stack
+
+- LIFO access: last in, first out.
+- Restricted form of a linear list: insert and remove only at the end of the list
+
+- Method of stack
+  - `size()`: number of elements in the stack.
+  - `isEmpty()`: checks if stack has no elements.
+  - `push(Object o)`: add object o to the top of stack.
+  - `pop()`: remove the top object if stack is not empty; otherwise, throw stackEmpty.
+  - `Object &top()`: return a reference to the top element
+
+- Array version *not important*
+  - Maintain an integer `size` to record the size of the stack.
+  - `size()`: return size;
+  - `isEmpty()`: return (size == 0);
+  - `push(Object o)`: add object o at index size of the array and increment size. Allocate more space if necessary.
+  - `pop()`: If isEmpty(), throw `stackEmpty`; otherwise, decrement size.
+  - `Object &top()`: return a reference to the top element `Array[size-1]`
+
+- Linked list version
+  - `size()`: LinkedList::size();
+  - `isEmpty()`: LinkedList::isEmpty();
+  - `push(Object o)`: insert object at the beginning LinkedList::insertFirst(Object o);
+  - `pop()`: remove the first node linkedList::removeFirst();
+  - `Object &top()`: return a reference to the object stored in the first node
+
+- Array
+  - not memory-efficient: need to allocate a big enough array
+- Linked list with a size data member
+  - memory-efficient: a new item just needs extra constant amount of memory
+  - All operations are of constant runtime, same as array
+
+### Queue
+
+- Restricted form of a linear list: insert at one end and remove from the other.
+- FIFO access: first in, first out.
+
+- Methods of Queue
+  - `size()`: number of elements in the queue.
+  - `isEmpty()`: check if queue has no elements.
+  - `enqueue(Object o)`: add object o to the rear of the queue.
+  - `dequeue()`: remove the front object of the queue if not empty; otherwise, throw queueEmpty.
+  - `Object &front()`: return a reference to the front element of the queue.
+  - `Object &rear()`: return a reference to the rear element of the queue
+
+- Double-ended singly-linked list is sufficient for linkedList
+
+- Array version
+  
+  To make implementation more efficient, we use a circular array.
+
+## STL
+
+
