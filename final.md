@@ -811,3 +811,102 @@ vector<string> v4(2, “abc”);
   - `push_back()`
   - `pop_back()`
   - `[]`: changing the value get by `[]` won't change the value of vector. We can change the value of vector using `v[i]=num`. We can't increase the size of vector with `[]`
+  - `clear()`: makes vector v empty
+  - `v.front()`: Returns a reference to the first element
+  - `v.back()`: Returns a reference to the last element in v
+  - `v.insert(p,t)`: Inserts element with value t **right before** the element referred to by **iterator** p.
+  - `v.erase(p)`:
+    - Removes element referred to by iterator p
+    - Returns an iterator referring to the element after the one deleted, or an off-the-end iterator if p referred to the last element
+    - p cannot be an off-the-end iterator
+
+### Iterator
+
+- Each container type has a companion iterator type which lets us examine elements and navigate in the container.
+- Iterators are more general than subscripts: All of the library containers define iterator types, but only a few of them support subscripting
+- An iterator is a generalization of pointer. They are pointers to the elements of containers
+
+```cpp
+vector<int>::iterator it;
+```
+
+- `v.begin()`: return an iterator pointing to the first element of vector
+- `v.end()`: returns an iterator positioning to one-pastthe-end of the vector
+- If the vector is empty, the iterator returned by begin is the same as the iterator returned by end
+- We can access the the element to which the iterator refers with `*iter`
+- Increment/decrement operator
+  - `++iter`, `iter++`: advance to the next item in vector
+  - `--iter`, `iter--`: go back to the previous item
+- We use `iter == iter2` and `iter != iter2`: test whether two iterators point to the same data item
+
+We can use const iterator to avoid changing the value.
+
+Vector support `iterator arithmetic`, however, **not all type** support this
+
+```cpp
+iter+n, iter-n
+```
+
+Similarly, vector support `relational operation on iterator`, however, **not all containers** support relational operation on iterator
+
+### Deque
+
+- Pronounced as “deck”. Means double-ended queue
+- Based on arrays
+- Supports fast random access.
+- Fast insert/delete at front or back.
+- To use, `#include <deque>`
+
+- Initialization method
+- `deque<T> d`; `deque<T> d(d1)`;
+- `deque<T> d(n,t)`: create d with n elements, each with value t
+- `size()`, `empty()`
+- `push_back()`, `pop_back()`
+- random access through subscripting: `d[k]`
+- `begin()`, `end()`, `insert(p, t)`, `erase(p)`
+- Operations on iterators
+  - `*iter`, `++iter`, `--iter`, `iter1 == iter2`, `iter1 != iter2`, etc
+- It supports insert and remove at the beginning
+  - `d.push_front(t)`: Add element with value t to front of d
+  - `d.pop_front()`: Remove the first element in d
+
+### List
+
+- Based on a doubly-linked lists
+- Supports only bidirectional sequential access.
+  - If you want to visit the 15th element, you need to go from the beginning and visit every one between the 1st and the 15th.
+- Fast insert/delete at any point in the list.
+- To use, `#include <list>`
+
+- Initialization method
+- `list<T> l`; `list<T> l(li)`;
+- `list<T> l(n,t)`: create l with n elements, each with value t
+- `size()`, `empty()`
+- `push_back()`, `pop_back()`
+- `begin()`, `end()`
+- Operations on iterators
+  - `*iter`, `++iter`, `--iter`, `iter1 == iter2`, `iter1 != iter2`, etc.
+
+- Does not support subscripting
+- No iterator arithmetic for list
+- No relational operation <, <=, >, >= on iterator of list
+- Supports insert and remove at the beginning
+  - supports insert and remove at the beginning: Add element with value t to front of l
+  - l.pop_front(): Remove the first element in l
+
+### Choosing Sequential Container
+
+- `vector` and `deque` are fast for random access, but are not efficient for inserting/removing at the middle
+  - For example, removing leaves a hole and we need to shift all the elements on the right of the hole
+  - For `vector`, only inserting/removing at the back is fast
+  - For `deque`, inserting/removing at both back and front is fast
+- `list` is efficient for inserting/removing at the middle, but not efficient for random access
+  - It is based on linked list. Accessing an item requires traversal
+
+### General Rules of Thumb
+
+- Use `vector`, unless you have a good reason to prefer another container.
+- If the program requires random access to elements, use a `vector` or a `deque`.
+- If the program needs to insert or delete elements in the middle, use a `list`.
+- If the program needs to insert or delete elements at the front and the back, but not in the middle, use a `deque`.
+- If the program needs both random access and inserting/deleting at the middle, the choice depends to the predominant operation (whether it does more random access or more insertion or deletion)
