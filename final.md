@@ -756,4 +756,58 @@ class Complex {
 
 ## STL
 
+C++ has a standard template library (STL) that provides us with an easy way to define containers
 
+- Divided into three components:
+  - Containers: data structures that hold a collection of objects of a specified type
+  - Iterators: used to examine and navigate container elements
+  - Algorithms: searching, sorting and many others
+
+There are three types of stl containers
+
+- Sequential Containers: let the programmer control the order in which the elements are stored and accessed. The order does not depend on the values of the elements
+- Associative Containers: store elements based on their values. The order depends on the value of the elements
+- Container Adapters: take an existing container type and make it act like a different type
+
+- There are three sequential containers:
+  - vector: based on arrays.
+    - Supports fast random access.
+    - Fast insert/delete at the back. Inserting or deleting at other position is slow.
+  - deque (double-ended queue): based on arrays.
+    - Supports fast random access.
+    - Fast insert/delete at front or back.
+  - list: based on a doubly-linked lists
+    - Supports only bidirectional sequential access.
+    - Fast insert/delete at any point in the list.
+
+### Vector
+
+To use a vector, include the appropriate header and namespace.
+
+```cpp
+#include <vector>
+using namespace std;
+vector<int> ivec; // holds ints
+vector<IntSet> isvec; // holds IntSets
+vector<int> v1; //default constructor gives an empty vector
+vector<int> v2(v1); // Copy constructor
+vector<int> v3(10, -1); // Construct v3 that has n elements with value t
+vector<string> v4(2, “abc”);
+```
+
+- Method of `vector`
+  - `size`
+
+    `size()` return a value of `size_type` corresponding to the vector type.
+
+  - `vector<int>::size_type`
+    - A companion type of vector
+    - Essentially an unsigned type (unsigned int or unsigned long)
+    - Note: not vector::size_type
+    - size_type makes the type machine-independent
+    - Usualy we convert `size_type` into `unsigned` type e.g. `int`
+
+  - `empty()`
+  - `push_back()`
+  - `pop_back()`
+  - `[]`: changing the value get by `[]` won't change the value of vector. We can change the value of vector using `v[i]=num`. We can't increase the size of vector with `[]`
