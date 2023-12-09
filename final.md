@@ -545,3 +545,152 @@ void List::copyList(node *list){
 ```
 
 ## Operator Overloading
+
+Redefining the meaning of the operators when applied to objects of class type
+
+- Basic Syntax
+
+  ```cpp
+  A operator+(const A &l, const A &r);
+  ```
+
+- Most overloaded operators may be defined as ordinary nonmember functions or as class member functions
+
+  ```cpp
+  A operator+(const A &l, const A &r);
+  // returns l “+” r
+  A A::operator+(const A &r);
+  // returns *this “+” r
+  ```
+
+- Operator Type
+  - Unary operator: Only need one operand if non-member function, none if a member function.
+  - Binary operator: Two operand if non-member function, one if a member function.
+
+```cpp
+class Complex {
+  // OVERVIEW: a complex number class
+  double real;
+  double imag;
+  public:
+  Complex(double r=0, double i=0); // Constructor
+  Complex &operator += (const Complex &o);
+  // MODIFIES: this
+  // EFFECTS: adds this complex number with the
+  // complex number o and return a reference
+  // to the current object.
+}
+
+// INFO: Member Function
+Complex &Complex::operator += (const Complex &o){
+    real += o.real;
+    imag += o.imag;
+    return *this;
+}
+
+// INFO: Non-member Function
+// BUG: A non-member function access the class attributes
+Complex operator + (const Complex &o1,
+        const Complex &o2){
+    Complex rst;
+    rst.real = o1.real + o2.real;
+    rst.imag = o1.imag + o2.imag;
+    return rst;
+}
+```
+
+### Friend
+
+The "friend" declaration allows you to expose the private state of one class to another function (and only that function) explicitly.
+
+```cpp
+// INFO: A Demo of friend declaration
+class foo {
+    friend void baz();
+    int f;
+};
+void baz() { ... }
+```
+
+We can also declare a class as `friend`.
+
+```cpp
+class foo {
+    friend class bar;
+    friend void baz();
+    int f;
+};
+class bar { ... };
+void baz() { ... }
+```
+
+- Caution
+  - `friend` declaration may appear anywhere in the class.
+  - It is a good idea to group friend declarations together either at the beginning or end of the class definition.
+
+```cpp
+class Complex {
+    // OVERVIEW: a complex number class
+    double real;
+    double imag;
+    public:
+    Complex(double r=0, double i=0);
+    Complex &operator += (const Complex &o);
+    friend Complex operator+(const Complex &o1,
+            const Complex &o2);
+};
+```
+
+### Some special operators
+
+- Overloading Operator `[]`
+
+  ```cpp
+  // INFO: 
+  const int &IntSet::operator[](int i) const {
+      if(i >= 0 && i < numElts) return elts[i];
+      else throw -1;
+  }
+
+  int &IntSet::operator[](int i) {
+      if(i >= 0 && i < numElts) return elts[i];
+      else throw -1;
+  }
+  ```
+
+- Why we need a nonconst version that returns a reference to int?
+  - We need to assign to an element through subscript operation eg. `is[5] = 2`;
+- Why we need a const version that returns a const reference to int?
+  - We may call the subscript operator with some const IntSet objects or within some const member function. Const objects/const member function can only call their const member functions.
+  - Furthermore, the return type should be const reference because we cannot use a const object (elts[i] in this case is a const int) to initialize a non-const reference.
+
+- Overloading Output Operator `<<`
+
+  To print out all the elements of class member, we can redefine the operator `<<`
+
+  ```cpp
+  ostream &operator<<(ostream &os, const IntSet &is){
+      for(int i = 0; i < is.size(); i++)
+          os << is[i] << " ";
+      return os;
+  }
+  ```
+
+  `cout << “hello ” << “world!” << endl;` i.e.
+
+  ```cpp
+  cout << “hello ”;
+  cout << “world!”;
+  cout << endl;
+  ```
+
+  - operator<< must be a **nonmember function** because the first operand is not of the class type
+
+- Overloading Input Operator `>>`
+
+  ```cpp
+  istream &operator>>(istream &is, foo &obj){
+      ...
+      return is;
+  }
+  ```
