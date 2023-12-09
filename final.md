@@ -892,7 +892,7 @@ Similarly, vector support `relational operation on iterator`, however, **not all
 - No relational operation <, <=, >, >= on iterator of list
 - Supports insert and remove at the beginning
   - supports insert and remove at the beginning: Add element with value t to front of l
-  - l.pop_front(): Remove the first element in l
+  - `l.pop_front()`: Remove the first element in l
 
 ### Choosing Sequential Container
 
